@@ -1,5 +1,5 @@
-import Exercise from "../models/Exercise";
-import WorkoutLog from "../models/WorkoutLog";
+import Exercise from "../models/Exercise.js";
+import WorkoutLog from "../models/WorkoutLog.js";
 
 
 export const getExercises = async (req, res) => {
