@@ -18,14 +18,25 @@ const workoutLogSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Exercise",
             },
-
-            sets: {
-                type: [Number],
-                default: [0,0,0],
+            name: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Exercise",
             },
+            sets: [
+                {
+                    reps: {
+                        type: [Number],
+                        default: [0, 0, 0],
+                    },
+                    completed: {
+                        type: Boolean,
+                        default: false
+                    }
+                },
+            ]
         },
     ],
-}, {timestamps: true});
+}, { timestamps: true });
 
 const WorkoutLog = mongoose.model("WorkoutLog", workoutLogSchema);
 
