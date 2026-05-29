@@ -12,6 +12,11 @@ const workoutLogSchema = new mongoose.Schema({
         default: 0,
     },
 
+    completed: {
+        type: Boolean,
+        default: false,
+    },
+
     exercises: [
         {
             exerciseId: {
@@ -19,15 +24,12 @@ const workoutLogSchema = new mongoose.Schema({
                 ref: "Exercise",
             },
             name: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Exercise",
+                type: String,
+                required: true,
             },
             sets: [
                 {
-                    reps: {
-                        type: [Number],
-                        default: [0, 0, 0],
-                    },
+                    reps: Number,
                     completed: {
                         type: Boolean,
                         default: false

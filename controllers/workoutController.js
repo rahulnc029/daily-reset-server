@@ -29,21 +29,32 @@ export const deleteExercise = async (req, res) => {
 };
 
 export const saveWorkout = async (req, res) => {
-    const today = new Date().toISOString().split("T")[0];
+    try {
+        const today = new Date().toISOString().split("T")[0];
 
-    const workout = await WorkoutLog.findOneAndUpdate(
-        { date: today },
-        {
-            date: today,
-            exercises: req.body.exercises,
-            durationInSeconds: req.body.durationInSeconds,
-        },
-        {
-            upsert: true,
-            new: true,
-        }
-    );
-    res.json(workout);
+        const exercises = req.body.exercises;
+
+        const completed = exercises.every((exercise) => exercise.sets.every((set) => set.completed === true));
+
+        const workout = await WorkoutLog.findOneAndUpdate(
+            { date: today },
+            {
+                date: today,
+                exercises,
+                durationInSeconds: req.body.durationInSeconds,
+                completed,
+            },
+            {
+                upsert: true,
+                new: true,
+            }
+        );
+        res.json(workout);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error saving workout" });
+    }
 };
 
 
@@ -65,4 +76,9 @@ export const updateExercise = async (req, res) => {
         }
     );
     res.json(exercise);
+};
+
+export const getWorkoutLogs = async (req, res) => {
+    const logs = await WorkoutLog.find().sort({ date: 1, });
+    res.json(logs);
 };
