@@ -8,9 +8,16 @@ const exerciseSchema = new mongoose.Schema({
     },
 
     sets: {
-        type: [Number],
-        default: [0, 0, 0],
+        type: Number,
+        default: 3,
     },
+
+    reps: [
+        {
+            type: Number,
+            required: true,
+        },
+    ],
 
     order: {
         type: Number,
@@ -21,7 +28,7 @@ const exerciseSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
-}, { timestamps: true});
+}, { timestamps: true });
 
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 

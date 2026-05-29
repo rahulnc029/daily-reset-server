@@ -15,7 +15,8 @@ export const createExercise = async (req, res) => {
     const count = await Exercise.countDocuments();
     const exercise = await Exercise.create({
         name: req.body.name,
-        sets: req.body.sets || [0, 0, 0],
+        sets: req.body.sets,
+        reps: req.body.reps,
         order: count + 1,
     });
     res.status(201).json(exercise);
