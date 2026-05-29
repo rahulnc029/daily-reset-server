@@ -15,6 +15,7 @@ export const createExercise = async (req, res) => {
     const count = await Exercise.countDocuments();
     const exercise = await Exercise.create({
         name: req.body.name,
+        sets: req.body.sets || [0, 0, 0],
         order: count + 1,
     });
     res.status(201).json(exercise);
@@ -49,4 +50,18 @@ export const getTodayWorkout = async (req, res) => {
     const today = new Date().toISOString().split("T")[0];
     const workout = await WorkoutLog.findOne({ date: today, });
     res.json(workout);
+};
+
+export const updateExercise = async (req, res) => {
+    const exercise = await Exercise.findByIdAndUpdate(
+        req.params.id,
+        {
+            name: req.body.name,
+            sets: req.body.sets,
+        },
+        {
+            new: true,
+        }
+    );
+    res.json(exercise);
 };

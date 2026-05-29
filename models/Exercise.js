@@ -7,6 +7,11 @@ const exerciseSchema = new mongoose.Schema({
         required: true,
     },
 
+    sets: {
+        type: [Number],
+        default: [0, 0, 0],
+    },
+
     order: {
         type: Number,
         required: true,
