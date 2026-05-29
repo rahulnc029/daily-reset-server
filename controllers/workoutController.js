@@ -29,7 +29,7 @@ export const deleteExercise = async (req, res) => {
 export const saveWorkout = async (req, res) => {
     const today = new Date().toISOString().split("T")[0];
 
-    const workout = await WorkoutLog.findByIdAndUpdate(
+    const workout = await WorkoutLog.findOneAndUpdate(
         { date: today },
         {
             date: today,
