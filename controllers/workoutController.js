@@ -30,30 +30,57 @@ export const deleteExercise = async (req, res) => {
 
 export const saveWorkout = async (req, res) => {
     try {
-        const today = new Date().toISOString().split("T")[0];
+        const today = new Date()
+            .toISOString()
+            .split("T")[0];
 
-        const exercises = req.body.exercises;
+        const existingWorkout =
+            await WorkoutLog.findOne({
+                date: today,
+            });
 
-        const completed = exercises.every((exercise) => exercise.sets.every((set) => set.completed === true));
+        if (existingWorkout) {
+            return res.status(400).json({
+                message:
+                    "Workout already saved for today",
+            });
+        }
 
-        const workout = await WorkoutLog.findOneAndUpdate(
-            { date: today },
-            {
+        const exercises =
+            req.body.exercises;
+
+        const completed =
+            exercises.every((exercise) =>
+                exercise.sets.every(
+                    (set) =>
+                        set.completed === true
+                )
+            );
+
+        if (!completed) {
+            return res.status(400).json({
+                message:
+                    "Complete all sets before saving workout",
+            });
+        }
+
+        const workout =
+            await WorkoutLog.create({
                 date: today,
                 exercises,
-                durationInSeconds: req.body.durationInSeconds,
-                completed,
-            },
-            {
-                upsert: true,
-                new: true,
-            }
-        );
-        res.json(workout);
+                durationInSeconds:
+                    req.body.durationInSeconds,
+                completed: true,
+            });
 
+        res.status(201).json(workout);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Error saving workout" });
+
+        res.status(500).json({
+            message:
+                "Error saving workout",
+        });
     }
 };
 
